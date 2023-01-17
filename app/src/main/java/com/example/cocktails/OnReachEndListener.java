@@ -1,4 +1,4 @@
-package com.example.cocktails.presentation;
+package com.example.cocktails;
 public interface OnReachEndListener {
     void onReachEnd();
 }

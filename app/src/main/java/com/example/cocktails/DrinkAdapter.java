@@ -1,4 +1,4 @@
-package com.example.cocktails.data;
+package com.example.cocktails;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.cocktails.R;
-import com.example.cocktails.domain.Drink;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
     }
 
     public void setOnDrinkClickListener(OnDrinkClickListener onDrinkClickListener) {
-        this.onDrinkClickListener = onDrinkClickListener;
+        this.onDrinkClickListener = (OnDrinkClickListener) onDrinkClickListener;
     }
 
     public void setDrinks(List<Drink> drinks) {
@@ -48,19 +46,17 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
     @Override
     public void onBindViewHolder(@NonNull DrinkViewHolder holder, int position) {
         Drink drink = drinks.get(position);
+
         Glide.with(holder.itemView)
-                .load(drink.getDrinkImage().getUrl())
-                .into(holder.drinkImage);
-        if (position == drinks.size() - 10 && onReachEndListener !=null) {
+                .load(drink.getStrDrinkThumb())
+                .into(holder.imageViewDrink);
+        if (position >= drinks.size() - 10 && onReachEndListener !=null) {
             onReachEndListener.OnReachEnd();
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onReachEndListener !=null){
-                    onDrinkClickListener.onDrinkClick(drink);
-                }
+        holder.itemView.setOnClickListener(view -> {
+            if (onDrinkClickListener !=null){
+                onDrinkClickListener.onDrinkClick(drink);
             }
         });
     }
@@ -70,21 +66,21 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
         return drinks.size();
     }
 
-    public interface OnReachEndListener {
+    interface OnReachEndListener {
         void OnReachEnd();
     }
 
-    public interface OnDrinkClickListener{
+    interface OnDrinkClickListener{
         void onDrinkClick(Drink drink);
     }
 
     static class DrinkViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView drinkImage;
+        private ImageView imageViewDrink;
 
         public DrinkViewHolder(@NonNull View itemView) {
             super(itemView);
-            drinkImage = itemView.findViewById(R.id.textViewDrink);
+         imageViewDrink = itemView.findViewById(R.id.imageViewDrink);
 
         }
     }
